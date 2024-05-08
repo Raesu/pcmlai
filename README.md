@@ -1,6 +1,6 @@
 ## Professional Certification in AI/ML
 ### Practical Application Assignment 5.1
-### [Project Link](https://github.com/Raesu/pcmlai)
+### [Project Link](https://github.com/Raesu/pcmlai/tree/master/Module%205/assignment_5_1_starter)
 
 ### Objective
 The objective of this assignment was to analyze a set coupon acceptance data and find trends in acceptance rate across different characteristics.
