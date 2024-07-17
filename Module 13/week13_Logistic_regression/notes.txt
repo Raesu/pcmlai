@@ -1,0 +1,66 @@
+
+Motivation (derivation of the logistic function)
+	Binary classification problem. 
+	Try with linear regression, show that threshold is very sensitive to an outlier
+	Josh's binning argument -> derive logistic function from Gaussian assumption
+
+Formulation as optimization problem
+	Cross entropy loss from likelihood.
+	Solve in code.
+	Show result is less sensitive.
+
+Multiple inputs
+	z = linear combination of the inputs, goal is to find weights
+	Solve a problem in code. 
+	Show decision boundaries in 2D
+	performance: confusion matrix, accuracy, precision, recall
+
+Regularization 
+	L2 Ridge (C ... inverse regularization strength)
+	L1 Lasso (feature selsection, sparse models)
+
+Multiclass
+	One-vs-Rest
+	multinomial logistic regression
+
+
+------------------------------------------------------
+
+
+titanic dataset
+fare
+age
+
+
+
+Data 100 Fall 2019
+
+Joey Gonzalez: Sp 19
+
+https://ds100.org/fa19/syllabus/
+
+
+
+
+
+
+Regression Analysis with Python 
+Laura Massaron, Alberto Boschetti
+https://learning.oreilly.com/library/view/regression-analysis-with/9781785286315/ch03s06.html
+
+
+In the following chapter, you'll find:
+A formal and mathematical definition of the classification problem, for both binary and multiclass problems
+How to evaluate classifier performances—that is, their metrics
+The math behind Logistic Regression
+A revisited formula for SGD, specifically built for Logistic Regression
+The multiclass case, with Multiclass Logistic Regression
+
++ Example binary classification problem
++ Problems with applying linear regression
++ 
+
+
+cross entropy loss
+https://towardsdatascience.com/where-did-the-binary-cross-entropy-loss-function-come-from-ac3de349a715
+

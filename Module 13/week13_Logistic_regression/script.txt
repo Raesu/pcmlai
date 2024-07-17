@@ -1,0 +1,136 @@
+=============
+week13_video1
+=============
+
+
+INTRO
+
+In the last module, you learned how to classify data using the K nearest neighbors approach. KNN is very intuitive, and it often does the job very well. However it has one significant downside, which is that, to classify a new item, you must find its nearest neighbors from amongst all of the training data. This cal be quite expenssive, both in terms of computation and memory. 
+
+This is very different from what we did with linear regression, where to decide the value of a new point, all we needed were the coefficients of the linear model, not the entire data set. 
+
+In this module we will start to learn about classification models that involve only a small number of coefficients, like linear regression. The simplest of these models, a direct analog to linear regression but for classification, is called logistic regression. 
+
+As we will see, naming it logistic regression as opposed to logistic classification makes sense, since the output of the model will be, not the discrete valued class to which the input belongs, but a continuos-valued probability that it belongs to this or that class. 
+
+----------------------------------------------------------------
+
+To demonstrate the technique, we will use the iris dataset. This dataset consists of measurement of the lengths and widths of the petals and sepals of 150 iris flowers. You can see here the data in a pandas dataframe. There are 5 columns: the sepal length, sepal width, petal length, petal width, and finally, the species of iris, as an integer 0, 1, or 2. 
+
+----------------------------------------------------------------
+
+Here a 0 stands for the species setosa, a 1 is versicolor, and a 2 is a virginica type iris.
+
+In all of these, the sepal, which is the outer protective part of the flower, is typically wider and longer than the interior petals, which are short and narrow. 
+
+Our goal will be to build a model that can classify iris flowers into setosa, versicolor, and virginica, given the sizes of their sepals and petals.
+
+----------------------------------------------------------------
+
+Let's begin with a simpler problem. Let's see if we can distinguish between virginica and versicolor by their petal length alone. In this plot we see that virginica petals are typically larger than versicolor,
+
+----------------------------------------------------------------
+
+and so we might imagine placing a threshold about here at 4.9 cm, and declaring that all flowers with petals larger than that number are classified as virginica, and all smaller are versicolor. Sounds good. Now all we need is a methodology for computing this threshold. 
+
+----------------------------------------------------------------
+
+Let's try using what we know, which is linear regression. That is, let's find a straigth line that minimizes the sum of the squares of the vertical distances from the line to the data. 
+Then, wherever that line crosses the midpoint between versicolor and virginica, that is where we will place our threshold. 
+
+...
+MAKE DRAWINGS FOR THIS
+COME UP WITH 4.906
+COMPARE WITH KNN
+----
+
+THIS HAS A FEW PROBLEMS. FIRST, AS A PRACTICAL MATTER, THE LINE IS COMPETELY UNIMPORTANT. ONCE WE HAVE EXTRACTED THE THRESHOLD, WE SHOULD THROW AWAY THE LINE. 
+ANOTHER IS THE SENSITIVITY TO OUTLIERS. 
+
+WE CAN DO BETTER WITH LOGISTIC REGRESSION
+---------------------------------------------------------------------
+
+===============
+week 13 video 2
+===============
+
+Imagine now that you had to bet on whether an unseen flower was a versicolor or virginica based only on its petal lengths. A reasonable way to go about it would be to go back to the dataset and to list all flowers with similar petal lengths, and then decide by majority vote. 
+
+Here is an illustration. 
+Let's say we grid the petal width space into a large number of bins, in this case XXXX. Then we count the number of each type of flower -- versicolor or virginica -- in each bin. The horizontal lines here represent the expected value of the flower species in that bin. If the line is near versicolor, it is because there is a larger percentage of versicolor flowers in that bin, and we also expect any new flower that falls into that bin will also be versicolor. Our threshold between versicolor and virginica should then be in the bin corresponding to equal parts versicolor and virginica flowers. 
+
+---------------------------------------------------------------------
+
+This line, made by connecting the horizontal lines, is jagged but it has a nice interpretation which the linear regression line lacked, which is that it represents the probability that the flower is a versicolor, given its petal length. 
+
+In notation, 
+
+z = p(versicolor|petal length)
+
+And 
+
+1-z = p(virginical| petal length)
+
+because of course we are not considering the setosa irises at all.
+
+---------------------------------------------------------------------
+
+To derive logistic regression we will assume that the marginal distributions of petal lengths -- that is, the distribution of petal lengths amongst the versicolor flowers and the virginica flowers separately -- are Gaussian and they have the same variance.
+
+---------------------------------------------------------------------
+
+Let's now do the same thing we did before; let's look at a vertical sliver of the distribution and mark our expectation for flowers in that bin. 
+
+Here is the formula. Confusingly we are going to use the letter sigma for this expectation, even though we usually think of sigma as the standard deviation. You'll see why later. The expectation sigma for a flower with petal length  x equal the number of versicolor flowers times the numerical value for versicolor, plus the number of virginica flowers in the bin times the numerical value for virginica, divided by the total number of flowers in the bin. 
+
+Carrying this forward a couple steps we see that this equals one over one plust the ratio of versicolor to virginica flowers. 
+
+---------------------------------------------------------------------
+
+Now let's use the assumption that the distributions are Gaussian to find a simple expression for that ratio. 
+
+Here are the formulas for the two distributions. If we take their ratio, the outer constants cancel, and it becomes an exponential of the difference between two squares. If we expand these terms, and again use the assumption that the variances were equal, we get this very simple expression. That the ratio equals e raised to a power that is a linear function of x. 
+
+Plugging this back into the formula for sigma we get the following: that sigma(x), which is the continuous probability that the flower is a virginica given by its petal width x, equals 1/(1 + e^{-z}) where z is a linear function of x with coefficients beta 0 and beta 1. 
+
+---------------------------------------------------------------------
+
+This function is called the sigmoid function because of is siilarity to a letter S. 
+It is also known as the logistic function. 
+
+Just as in linear regression we were searching a amongst coefficient b0 and b1 such that a linear function with those coefficients best fit the data, in logistic regression we search for beta 0 and beta 1 such that a logistic function best fits the data. 
+
+The differences between a straight line and an s-shaped curve are what make one better for regression problems and the other more suitable for classification problems. 
+
+---------------------------------------------------------------------
+
+Our next task will be to estimate the parameters beta 0 and beta 1 for a particular dataset when we do not know the underlying distributions. One way to do this would be to use sample estimates of the marginal means and variances and plug them into the formulas we just derived. This runs into a couple problems. First, what if the sample variances are not the same? Which one do we use? Second, and more importantly, we will eventually extend this technique to the larger problem with more than one input and more than two classes, and in that case we will not have explicit formulas. 
+
+---------------------------------------------------------------------
+
+Instead, we will pose this as an optimization problem, just as we did with linear regression. 
+
+The cost function that we will use for this optimization will be to maximize the lieklihood function. This is a subtle concept: we want to find the sigmoid function that maximizes the probability that we observe the data that we in fact did observe. 
+
+It is possible that the true distribution of versicolor and virginica flowers is over here, and that we just happened to collect a bunch of unusually small flowers. But it is unlikely. It is much more likely that the true sigmoid function is around here. 
+
+How do we quantify the likelihood?
+
+We are asking what is the probability that I saw this observation and this observation and this observation. In probability, the combination of independent events with an "and" translates into a product of the probabilities. Since sigma is the probability of the virginica and 1-sigma is the probability of versicolor, then the likelihood is the product of sigma for all the virginicas I collected, and 1 minus sigma for all of the versicolor I collected. 
+
+We can then take the logarithm of this expression. This is a good idea because it simplifies the product into a summation, and it has no effect on the result. 
+
+After a few more lines of algebra we arrive at this: the cross-entropy. Actually, this turns out to always be a negative number, and so we define the cross-entropy as the negative of this quantity, so a positive number. 
+
+And instead of maximizing the likelihood, we are going to minimize the cross-entropy, which is exactly the same thing, as we saw. 
+
+---------------------------------------------------------------------
+
+So to summarize, in this video we have derived a formula for the sigmoid or logistic function which will serve as our basis for simple classification problems. We've posted the problem of selecting a particular sigmoid function for a given dataset as an optimization problem in which we maximize the cross-entropy.
+
+In the next video we will learn to solve this in code. 
+
+
+
+
+

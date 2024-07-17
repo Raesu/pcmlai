@@ -1,0 +1,14 @@
+Video 1 TH: Introduction to logistic regression  (INCOMPLETE)
+Video 2 TH: Derivation of logistic regression
+Video 3 TH: Logistic regression with multiple features / regularization
+Video 4 TH: Multinomial Logistic Regression
+Video 5 SC: Demo
+
+--------------------------------
+25
+
+1 	done				3:15		NOT DONE
+2	done			  11:30
+3	NOT DONE			6:30
+4	NOT DONE
+5	-
